@@ -72,4 +72,6 @@ resources:
       service-plan: lite
       oauth2-configuration:
         redirect-uris:
-          - https://risk-management-approuter.cfapps.us20.hana.ondemand.com/login/callback
+          - https://cis-dts-cf-us20-i589361-j12vpy5l-dev-risk-management-srv.cfapps.us20.hana.ondemand.com/login/callback
+
+          
