@@ -53,6 +53,9 @@
     }
   },
   "cds": {
+     "hana": {            
+            "deploy-format": "hdbtable"        
+        },  
     "requires": {
       "API_BUSINESS_PARTNER": {
         "kind": "odata-v2",
@@ -64,7 +67,10 @@
       "[production]": {
         "db": "hana",
         "auth": "xsuaa"
-      }
+      },
+       "db": {                
+                "kind": "hana"            
+            }      
     }
   },
   "sapux": [
