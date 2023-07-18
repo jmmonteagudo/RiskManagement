@@ -76,5 +76,5 @@ resources:
         oauth2-configuration: 
           redirect-uris:
             - https://*.risk-management.cfapps.us20.hana.ondemand.com/login/callback
-            - https://e3f6ba12trial-dev-risk-management.cfapps.us10-001.hana.ondemand.com/login/callback
+            - https://cis-dts-cf-us20-i589361-j12vpy5l-dev-risk-management.cfapps.us20.hana.ondemand.com/login/callback
             - https:///login/callback
