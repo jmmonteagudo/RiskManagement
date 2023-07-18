@@ -8,7 +8,7 @@ build-parameters:
   before-all:
     - builder: custom
       commands:
-        - npx cds build --production
+        - npx -p @sap/cds-dk cds build --production
 modules:
   - name: risk-management-srv
     type: nodejs
@@ -16,15 +16,14 @@ modules:
     parameters:
       buildpack: nodejs_buildpack
     build-parameters:
-      builder: npm
+      builder: npm-ci
     provides:
       - name: srv-api # required by consumers of CAP services (e.g. approuter)
         properties:
           srv-url: ${default-url}
     requires:
-      - name: risk-management-auth
       - name: risk-management-db
-      - name: risk-management-destination
+      - name: risk-management-auth
 
   - name: risk-management-db-deployer
     type: hdb
@@ -51,6 +50,11 @@ modules:
       - name: risk-management-auth
 
 resources:
+  - name: risk-management-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
   - name: risk-management-auth
     type: org.cloudfoundry.managed-service
     parameters:
@@ -60,18 +64,17 @@ resources:
       config:
         xsappname: risk-management-${org}-${space}
         tenant-mode: dedicated
-  - name: risk-management-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
-  - name: risk-management-destination
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: destination
-      service-plan: lite
-      oauth2-configuration:
-        redirect-uris:
-          - https://cis-dts-cf-us20-i589361-j12vpy5l-dev-risk-management-srv.cfapps.us20.hana.ondemand.com/login/callback
-
-          
+        role-collections:
+        - name: 'RiskManager-${space}'
+          description: Manage Risks
+          role-template-references:
+          - $XSAPPNAME.RiskManager
+        - name: 'RiskViewer-${space}'
+          description: View Risks
+          role-template-references:
+          - $XSAPPNAME.RiskViewer
+        oauth2-configuration: 
+          redirect-uris:
+            - https://*.risk-management.cfapps.us20.hana.ondemand.com/login/callback
+            - https://e3f6ba12trial-dev-risk-management.cfapps.us10-001.hana.ondemand.com/login/callback
+            - https:///login/callback
